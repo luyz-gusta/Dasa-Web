@@ -1,0 +1,95 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+  /*Fonts*/
+  --font-poppins: "Poppins", sans-serif;
+  --font-inter: "Inter", sans-serif;
+
+  /*Dasa*/
+  --dasa-50: #003061;
+  --dasa-100: #00225b;
+  --dasa-200: #34c38f;
+  --dasa-300: #0f6dff;
+
+  /*General*/
+  --general-30: #f5f6fa;
+  --general-40: #e6e9f4;
+  --general-50: #d7dbec;
+  --general-60: #a1a7c4;
+  --general-70: #7e84a3;
+  --general-80: #5a607f;
+  --general-90: #333752;
+  --general-100: #131523;
+
+  /*Primary*/
+  --primary-30: #ecf2ff;
+  --primary-40: #d9e4ff;
+  --primary-50: #b6cbff;
+  --primary-60: #89abff;
+  --primary-70: #608dff;
+  --primary-80: #4f81ff;
+  --primary-90: #336dff;
+  --primary-100: #1e5eff;
+
+  /*Secondary*/
+  --secondary-30: #f4e9fe;
+  --secondary-40: #e9d3ff;
+  --secondary-50: #d8b1ff;
+  --secondary-60: #b97ff3;
+  --secondary-70: #a75ef1;
+  --secondary-80: #9645e9;
+  --secondary-90: #8125df;
+  --secondary-100: #6e0bd4;
+
+  /*Red*/
+  --red-30: #fde7ea;
+  --red-40: #fcd5d9;
+  --red-50: #fab3bc;
+  --red-60: #f8919d;
+  --red-70: #f45a6d;
+  --red-80: #f34359;
+  --red-90: #f12b43;
+  --red-100: #f0142f;
+
+  /*Green*/
+  --green-30: #daf9ec;
+  --green-40: #c4f8e2;
+  --green-50: #95f6cc;
+  --green-60: #74efb9;
+  --green-70: #48e9a5;
+  --green-80: #25e191;
+  --green-90: #1fd286;
+  --green-100: #06a561;
+
+  /*Yellow*/
+  --yellow-30: #fff9e1;
+  --yellow-40: #fff4c9;
+  --yellow-50: #ffeca3;
+  --yellow-60: #ffe582;
+  --yellow-70: #ffe45f;
+  --yellow-80: #ffd613;
+  --yellow-90: #ffc700;
+  --yellow-100: #f99600;
+}
+
+@theme inline {
+  /*Fonts*/
+  --font-poppins: var(--font-poppins);
+  --font-inter: var(--font-inter);
+
+  /* Dasa Colors */
+  --color-dasa-50: var(--dasa-50);
+  --color-dasa-100: var(--dasa-100);
+  --color-dasa-200: var(--dasa-200);
+  --color-dasa-300: var(--dasa-300);
+
+  /* General Colors */
+  --color-dasa-50: var(--dasa-50);
+  --color-dasa-100: var(--dasa-100);
+  --color-dasa-200: var(--dasa-200);
+  --color-dasa-300: var(--dasa-300);
+  --color-dasa-400: var(--dasa-400);
+}

@@ -7,15 +7,19 @@ import { Label } from "@/components/ui/label";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
     const mockUser = {
       email: "teste@teste.com",
       password: "123456",
@@ -23,17 +27,21 @@ export default function Home() {
     if (email === mockUser.email && password === mockUser.password) {
       localStorage.setItem("user", JSON.stringify({ email }));
       setError("");
-      alert("Login realizado com sucesso!");
-      router.push("/perfil")
+      toast.success("Login realizado com sucesso!");
+      setTimeout(() => {
+        router.push("/perfil");
+      }, 1200);
     } else {
       setError("Email ou senha inválidos.");
+      setLoading(false);
     }
   }
 
   return (
-    <main className="flex items-center justify-center min-h-screen w-full bg-background">
+    <main className="flex items-center justify-center min-h-screen w-full bg-background px-4">
+      <Toaster />
       <div className={cn("flex flex-col gap-6 w-full max-w-3xl")}> 
-        <Card className="overflow-hidden p-0">
+        <Card className="overflow-hidden p-0 border-0 shadow-none rounded-none md:border md:shadow md:rounded-xl">
           <CardContent className="grid p-0 md:grid-cols-2">
             <form className="p-6 md:p-8 w-full" onSubmit={handleSubmit}>
               <div className="flex flex-col gap-6">
@@ -52,6 +60,7 @@ export default function Home() {
                     required
                     value={email}
                     onChange={e => setEmail(e.target.value)}
+                    disabled={loading}
                   />
                 </div>
                 <div className="grid gap-3">
@@ -64,13 +73,23 @@ export default function Home() {
                       Esqueceu sua senha?
                     </a>
                   </div>
-                  <Input id="password" type="password" required value={password} onChange={e => setPassword(e.target.value)} />
+                  <Input id="password" type="password" required value={password} onChange={e => setPassword(e.target.value)} disabled={loading} />
                 </div>
                 {error && (
                   <div className="text-red-500 text-sm text-center">{error}</div>
                 )}
-                <Button type="submit" className="w-full">
-                  Login
+                <Button type="submit" className="w-full" disabled={loading} aria-busy={loading}>
+                  {loading ? (
+                    <span className="inline-flex items-center">
+                      <svg className="mr-2 h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                      </svg>
+                      Entrando...
+                    </span>
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                   <span className="bg-card text-muted-foreground relative z-10 px-2">

@@ -28,7 +28,7 @@ export default function Home() {
       setError("");
       toast.success("Login realizado com sucesso!");
       setTimeout(() => {
-        router.push("/perfil");
+        router.push("/configuracoes");
       }, 1200);
     } else {
       setError("Email ou senha inválidos.");

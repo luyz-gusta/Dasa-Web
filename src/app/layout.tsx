@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import "@/app/style.css";
+import GlobalProvider from "@/contexts/GlobalContext";
 
 export const metadata: Metadata = {
   title: "StockExpress",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body suppressHydrationWarning className={`antialiased`}>
-        {children}
+        <GlobalProvider>
+          {children}
+        </GlobalProvider>
       </body>
     </html>
   );

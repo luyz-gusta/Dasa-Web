@@ -1,9 +1,9 @@
-import { useGlobalContext } from "@/hooks/useGlobalContext";
 import MobileSection from "./components/MobileSection";
 import DesktopSection from "./components/DesktopSection";
+import { device } from "@/utils/device";
 
-export default function Dashboard() {
-  const { isTablet } = useGlobalContext();
+export default async function Dashboard() {
+  const { isTablet } = await device();
   return (
     <>
       {isTablet ? <MobileSection /> : <DesktopSection />}

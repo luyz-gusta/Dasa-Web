@@ -1,9 +1,6 @@
-interface Props {
-  width?: number;
-  height?: number;
-  testId?: string;
-}
-export default function Plus({ width = 20, height = 20, testId }: Props) {
+import { SVGProps } from '@/utils/SVGProps'
+
+export default function Plus({ width = 20, height = 20, testId }: SVGProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

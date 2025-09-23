@@ -76,7 +76,7 @@ export default function QRCodeReader() {
       
       // Navegar para página de cadastro com os dados do QR
       setTimeout(() => {
-        router.push(`/cadastro-material?data=${encodeURIComponent(data)}`);
+        router.push(`/view-material?data=${encodeURIComponent(data)}`);
       }, 1000);
     },
     onError: (errorMsg) => {
@@ -118,19 +118,19 @@ export default function QRCodeReader() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto relative">
+    <div className="relative mx-auto w-full max-w-md">
       {/* Overlay para confirmação de link - INATIVO */}
       {/* {showLinkConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="z-50 fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 p-4">
           <Card className="w-full max-w-sm">
             <CardHeader>
-              <CardTitle className="text-center text-lg">Link Detectado</CardTitle>
+              <CardTitle className="text-lg text-center">Link Detectado</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-3 bg-gray-50 rounded-md border text-sm break-all">
+              <div className="bg-gray-50 p-3 border rounded-md text-sm break-all">
                 {pendingUrl}
               </div>
-              <p className="text-sm text-gray-600 text-center">
+              <p className="text-gray-600 text-sm text-center">
                 Deseja abrir este link em uma nova aba?
               </p>
               <div className="flex gap-2">
@@ -158,30 +158,30 @@ export default function QRCodeReader() {
       {/* Scanner Area */}
       <div className="mb-6 rounded-xl overflow-hidden" style={{ backgroundColor: 'var(--general-40)', border: '1px solid var(--general-50)' }}>
         <div className="p-6 text-center" style={{ backgroundColor: 'var(--primary-30)' }}>
-          <h2 className="text-lg font-semibold mb-2" style={{ color: 'var(--general-100)' }}>Scanner QR Code</h2>
+          <h2 className="mb-2 font-semibold text-lg" style={{ color: 'var(--general-100)' }}>Scanner QR Code</h2>
           <p className="text-sm" style={{ color: 'var(--general-70)' }}>
             Escaneie para cadastrar material médico
           </p>
         </div>
         
-        <div className="p-6 space-y-4">
+        <div className="space-y-4 p-6">
           {/* Camera Preview */}
           <div className="relative">
             <div 
               id="qr-reader" 
-              className="w-full aspect-square rounded-lg overflow-hidden border-2 border-dashed"
+              className="border-2 border-dashed rounded-lg w-full aspect-square overflow-hidden"
               style={{ backgroundColor: 'var(--general-30)', borderColor: 'var(--general-60)' }}
             />
             
             {/* Overlay quando não está escaneando */}
             {!isScanning && !result && (
-              <div className="absolute inset-0 bg-opacity-90 flex items-center justify-center rounded-lg" style={{ backgroundColor: 'var(--general-30)' }}>
+              <div className="absolute inset-0 flex justify-center items-center bg-opacity-90 rounded-lg" style={{ backgroundColor: 'var(--general-30)' }}>
                 <div className="text-center">
-                  <div className="text-4xl mb-2">🏥</div>
+                  <div className="mb-2 text-4xl">🏥</div>
                   <p className="text-sm" style={{ color: 'var(--general-70)' }}>
                     Toque em Iniciar para escanear
                   </p>
-                  <p className="text-xs mt-1" style={{ color: 'var(--general-60)' }}>
+                  <p className="mt-1 text-xs" style={{ color: 'var(--general-60)' }}>
                     Material médico
                   </p>
                 </div>
@@ -203,7 +203,7 @@ export default function QRCodeReader() {
               <button
                 onClick={switchCamera}
                 disabled={!isScanning}
-                className="px-4 py-3 rounded-lg font-medium border transition-all"
+                className="px-4 py-3 border rounded-lg font-medium transition-all"
                 style={{ 
                   color: 'var(--primary-90)', 
                   borderColor: 'var(--primary-90)',
@@ -222,26 +222,26 @@ export default function QRCodeReader() {
       {result && (
         <div className="mb-6 rounded-xl overflow-hidden" style={{ backgroundColor: 'var(--green-30)', border: '1px solid var(--green-50)' }}>
           <div className="p-4 text-center" style={{ backgroundColor: 'var(--green-40)' }}>
-            <h3 className="text-base font-semibold" style={{ color: 'var(--green-90)' }}>QR Code Detectado</h3>
+            <h3 className="font-semibold text-base" style={{ color: 'var(--green-90)' }}>QR Code Detectado</h3>
             {lastDetectedAt && (
-              <p className="text-xs mt-1" style={{ color: 'var(--green-70)' }}>
+              <p className="mt-1 text-xs" style={{ color: 'var(--green-70)' }}>
                 {formatTimestamp(lastDetectedAt)}
               </p>
             )}
           </div>
           
-          <div className="p-4 space-y-3">
+          <div className="space-y-3 p-4">
             <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--general-30)' }}>
               <p className="text-sm break-all" style={{ color: 'var(--general-80)' }}>{result}</p>
             </div>
             
             <div className="text-center">
-              <p className="text-sm mb-3" style={{ color: 'var(--primary-80)' }}>
+              <p className="mb-3 text-sm" style={{ color: 'var(--primary-80)' }}>
                 Redirecionando para cadastro...
               </p>
               <button
                 onClick={handleNewScan}
-                className="px-4 py-2 rounded-lg font-medium border transition-all"
+                className="px-4 py-2 border rounded-lg font-medium transition-all"
                 style={{ 
                   color: 'var(--general-80)', 
                   borderColor: 'var(--general-60)',
@@ -267,7 +267,7 @@ export default function QRCodeReader() {
       )}
 
       {/* Instructions */}
-      <div className="text-center text-xs mt-6 space-y-1" style={{ color: 'var(--general-60)' }}>
+      <div className="space-y-1 mt-6 text-xs text-center" style={{ color: 'var(--general-60)' }}>
         <p>Aponte a câmera para um QR Code de material médico</p>
         <p>O sistema redirecionará automaticamente para o cadastro</p>
       </div>

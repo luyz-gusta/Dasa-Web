@@ -68,8 +68,8 @@ function CadastroMaterialContent() {
 
         if (insumos) {
           const insumosArray = JSON.parse(insumos);
-          insumosArray.push({
-            id: insumosArray.length + 1,
+          insumosArray.unshift({
+            id: Date.now().toString(), // ID único baseado no timestamp
             nome: materialData.insumo,
             data: getCurrentDateTimeBR(),
             usuario: 'Leticia',

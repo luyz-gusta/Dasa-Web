@@ -5,29 +5,16 @@ import { insumosData } from "@/mock/insumos";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-// Função para obter data e hora atual no formato brasileiro
-const getCurrentDateTimeBR = (): string => {
-  const now = new Date();
-  
-  const day = String(now.getDate()).padStart(2, '0');
-  const month = String(now.getMonth() + 1).padStart(2, '0'); // Mês começa em 0
-  const year = now.getFullYear();
-  
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  
-  return `${day}/${month}/${year}, ${hours}:${minutes}`;
-};
-
 export default function MobileSection() {
   const [insumos, setInsumos] = useState(insumosData)
   
   useEffect(() => {
     const storage = localStorage.getItem('insumos')
+    console.log(storage)
     if(storage){
       setInsumos(JSON.parse(storage))
     }else{
-      setInsumos(insumosData)
+      localStorage.setItem("insumos", JSON.stringify(insumosData));
     }
   }, [])
 
@@ -40,7 +27,7 @@ export default function MobileSection() {
         height={534}
         className="top-0 right-0 z-0 absolute"
       />
-      <main className="flex flex-col px-5 py-14 pb-24 w-full overflow-y-auto">
+      <main className="z-2 flex flex-col px-5 py-14 pb-32 w-full overflow-y-auto">
         <section className="flex flex-col gap-1 mb-6 w-full">
           <h4 className="font-raleway font-bold text-gray-900 text-2xl">Insumos</h4>
           <h5 className="font-raleway font-medium text-gray-600">Leticia</h5>
@@ -100,4 +87,7 @@ export default function MobileSection() {
     </div>
   );
 }
+
+
+
 

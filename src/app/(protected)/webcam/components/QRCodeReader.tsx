@@ -1,0 +1,99 @@
+'use client'
+
+import { useQRCodeScanner } from "@/hooks/useQRCodeScanner";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useEffect } from "react";
+
+export default function QRCodeReader() {
+  const { result, isScanning, error, scannerRef, startScanning, stopScanning, resetResult } = useQRCodeScanner({
+    onResult: (data) => {
+      console.log('QR Code detectado:', data);
+    }
+  });
+
+  useEffect(() => {
+    // Cleanup quando o componente é desmontado
+    return () => {
+      stopScanning();
+    };
+  }, [stopScanning]);
+
+  return (
+    <Card className="p-6 w-full max-w-2xl">
+      <div className="space-y-4">
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            {error}
+          </div>
+        )}
+
+        {result && (
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+            <strong>QR Code detectado:</strong>
+            <div className="mt-2 p-2 bg-white rounded border text-sm break-all">
+              {result}
+            </div>
+          </div>
+        )}
+
+        <div className="relative">
+          {!result ? (
+            <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+              {isScanning ? (
+                <div 
+                  ref={scannerRef} 
+                  id="qr-reader" 
+                  className="w-full h-full"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-500">
+                  <div className="text-center">
+                    <div className="text-6xl mb-4">📱</div>
+                    <p>Clique em &quot;Iniciar Scanner&quot; para começar</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+              <div className="text-center text-gray-600">
+                <div className="text-6xl mb-4">✅</div>
+                <p>QR Code escaneado com sucesso!</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex gap-2 flex-wrap">
+          {!result ? (
+            <Button
+              onClick={isScanning ? stopScanning : startScanning}
+              className="flex-1"
+              variant={isScanning ? "destructive" : "default"}
+            >
+              {isScanning ? '⏹️ Parar Scanner' : '▶️ Iniciar Scanner'}
+            </Button>
+          ) : (
+            <>
+              <Button onClick={resetResult} variant="outline" className="flex-1">
+                🔄 Novo Scan
+              </Button>
+              <Button 
+                onClick={() => {
+                  // Copiar resultado para clipboard
+                  navigator.clipboard.writeText(result).then(() => {
+                    console.log('QR Code copiado para o clipboard');
+                  });
+                }}
+                className="flex-1"
+              >
+                📋 Copiar
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
+    </Card>
+  );
+}

@@ -2,7 +2,7 @@
 
 import { useQRCodeScanner } from "@/hooks/useQRCodeScanner";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect } from "react";
 
 export default function QRCodeReader() {
@@ -20,16 +20,19 @@ export default function QRCodeReader() {
   }, [stopScanning]);
 
   return (
-    <Card className="p-6 w-full max-w-2xl">
-      <div className="space-y-4">
+    <Card className="w-full max-w-2xl">
+      <CardHeader>
+        <CardTitle>📱 Leitor de QR Code</CardTitle>
+      </CardHeader>
+      <CardContent>
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
             {error}
           </div>
         )}
 
         {result && (
-          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4">
             <strong>QR Code detectado:</strong>
             <div className="mt-2 p-2 bg-white rounded border text-sm break-all">
               {result}
@@ -37,7 +40,7 @@ export default function QRCodeReader() {
           </div>
         )}
 
-        <div className="relative">
+        <div className="relative mb-4">
           {!result ? (
             <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
               {isScanning ? (
@@ -93,7 +96,7 @@ export default function QRCodeReader() {
             </>
           )}
         </div>
-      </div>
+      </CardContent>
     </Card>
   );
 }

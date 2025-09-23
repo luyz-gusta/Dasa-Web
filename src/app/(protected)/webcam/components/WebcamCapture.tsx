@@ -2,7 +2,7 @@
 
 import { useWebcam } from "@/hooks/useWebcam";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Webcam from "react-webcam";
 import { useState } from "react";
 
@@ -17,15 +17,18 @@ export default function WebcamCapture() {
   };
 
   return (
-    <Card className="p-6 w-full max-w-2xl">
-      <div className="space-y-4">
+    <Card className="w-full max-w-2xl">
+      <CardHeader>
+        <CardTitle>📷 Captura de Webcam</CardTitle>
+      </CardHeader>
+      <CardContent>
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
             {error}
           </div>
         )}
 
-        <div className="relative">
+        <div className="relative mb-4">
           {!imgSrc ? (
             <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
               <Webcam
@@ -84,7 +87,7 @@ export default function WebcamCapture() {
             </>
           )}
         </div>
-      </div>
+      </CardContent>
     </Card>
   );
 }

@@ -1,18 +1,20 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
 import { useState, Suspense } from 'react'
 import { toast } from 'sonner'
 
 function CadastroMaterialContent() {
-  const searchParams = useSearchParams()
-  const qrCode = searchParams.get('data') || '523524543636345'
+  // QR code data não é mais usado, geramos código aleatório
   
-  const [quantity, setQuantity] = useState(1)
+  const [currentQuantity, setCurrentQuantity] = useState(150) // Estoque atual
+  const [inputQuantity, setInputQuantity] = useState(1) // Quantidade a adicionar/retirar
+  const [operation, setOperation] = useState<'adicionar' | 'retirar'>('adicionar') // Operação selecionada
   const [isLoading, setIsLoading] = useState(false)
-  const [showModal, setShowModal] = useState(false)
-  const [modalType, setModalType] = useState<'adicionar' | 'retirar' | null>(null)
-  const [modalQuantity, setModalQuantity] = useState(1)
+
+  // Gerar código aleatório para código de barras
+  const generateRandomCode = () => {
+    return Math.floor(Math.random() * 900000000000) + 100000000000 // Gera número de 12 dígitos
+  }
 
   // Dados mockados baseados na imagem
   const materialData = {
@@ -21,45 +23,16 @@ function CadastroMaterialContent() {
     data: '22/09/2025',
     tipo: 'EPI - Equipamento de proteção Individual',
     local: 'Hospital São Luiz',
-    codigo: qrCode
+    codigo: generateRandomCode().toString()
   }
 
-  const handleAdicionar = () => {
-    setModalType('adicionar')
-    setModalQuantity(1)
-    setShowModal(true)
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value) || 0
+    setInputQuantity(Math.max(0, value))
   }
 
-  const handleRetirar = () => {
-    setModalType('retirar')
-    setModalQuantity(1)
-    setShowModal(true)
-  }
-
-  const handleConfirmModal = () => {
-    if (modalType === 'adicionar') {
-      setQuantity(prev => prev + modalQuantity)
-      toast.success(`${modalQuantity} unidade(s) adicionada(s)!`)
-    } else if (modalType === 'retirar') {
-      setQuantity(prev => Math.max(0, prev - modalQuantity))
-      toast.success(`${modalQuantity} unidade(s) retirada(s)!`)
-    }
-    setShowModal(false)
-    setModalType(null)
-  }
-
-  const handleCancelModal = () => {
-    setShowModal(false)
-    setModalType(null)
-    setModalQuantity(1)
-  }
-
-  const incrementModalQuantity = () => {
-    setModalQuantity(prev => prev + 1)
-  }
-
-  const decrementModalQuantity = () => {
-    setModalQuantity(prev => Math.max(1, prev - 1))
+  const handleOperationChange = (newOperation: 'adicionar' | 'retirar') => {
+    setOperation(newOperation)
   }
 
   const handleSalvar = async () => {
@@ -69,7 +42,17 @@ function CadastroMaterialContent() {
       // Simular salvamento no banco
       await new Promise(resolve => setTimeout(resolve, 1500))
       
-      toast.success('Material salvo com sucesso!')
+      if (operation === 'adicionar') {
+        setCurrentQuantity(prev => prev + inputQuantity)
+        toast.success(`${inputQuantity} unidade(s) adicionada(s)! Estoque atual: ${currentQuantity + inputQuantity}`)
+      } else {
+        const newQuantity = Math.max(0, currentQuantity - inputQuantity)
+        setCurrentQuantity(newQuantity)
+        toast.success(`${inputQuantity} unidade(s) retirada(s)! Estoque atual: ${newQuantity}`)
+      }
+      
+      // Reset input
+      setInputQuantity(1)
       
     } catch {
       toast.error('Erro ao salvar material')
@@ -79,87 +62,7 @@ function CadastroMaterialContent() {
   }
 
   return (
-    <>
-      {/* Modal Overlay */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
-          <div className="rounded-xl max-w-sm w-full" style={{ backgroundColor: 'var(--general-30)' }}>
-            {/* Modal Header */}
-            <div className="p-6 text-center" style={{ backgroundColor: 'var(--primary-30)' }}>
-              <h3 className="text-lg font-semibold" style={{ color: 'var(--general-100)' }}>
-                {modalType === 'adicionar' ? 'Adicionar Material' : 'Retirar Material'}
-              </h3>
-              <p className="text-sm mt-1" style={{ color: 'var(--general-70)' }}>
-                Selecione a quantidade
-              </p>
-            </div>
-
-            {/* Modal Content */}
-            <div className="p-6 space-y-6">
-              {/* Quantity Selector */}
-              <div className="text-center">
-                <p className="text-sm font-medium mb-4" style={{ color: 'var(--general-80)' }}>
-                  Quantidade
-                </p>
-                <div className="flex items-center justify-center space-x-4">
-                  <button
-                    onClick={decrementModalQuantity}
-                    className="w-10 h-10 rounded-lg border font-medium transition-all"
-                    style={{ 
-                      color: 'var(--primary-90)', 
-                      borderColor: 'var(--primary-90)',
-                      backgroundColor: 'transparent'
-                    }}
-                  >
-                    -
-                  </button>
-                  <span className="text-2xl font-bold w-16 text-center" style={{ color: 'var(--general-100)' }}>
-                    {modalQuantity}
-                  </span>
-                  <button
-                    onClick={incrementModalQuantity}
-                    className="w-10 h-10 rounded-lg border font-medium transition-all"
-                    style={{ 
-                      color: 'var(--primary-90)', 
-                      borderColor: 'var(--primary-90)',
-                      backgroundColor: 'transparent'
-                    }}
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Modal Buttons */}
-              <div className="flex space-x-3">
-                <button
-                  onClick={handleCancelModal}
-                  className="flex-1 py-3 rounded-lg font-medium border transition-all"
-                  style={{ 
-                    color: 'var(--general-80)', 
-                    borderColor: 'var(--general-60)',
-                    backgroundColor: 'transparent'
-                  }}
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={handleConfirmModal}
-                  className="flex-1 py-3 rounded-lg font-medium text-white transition-all"
-                  style={{ 
-                    backgroundColor: modalType === 'adicionar' ? 'var(--green-80)' : 'var(--red-80)'
-                  }}
-                >
-                  {modalType === 'adicionar' ? 'Adicionar' : 'Retirar'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--general-30)', fontFamily: 'var(--font-poppins)' }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--general-30)', fontFamily: 'var(--font-poppins)' }}>
       {/* Header */}
       <div className="px-6 py-8">
         <h1 className="text-2xl font-bold" style={{ color: 'var(--general-100)' }}>
@@ -218,38 +121,70 @@ function CadastroMaterialContent() {
           </div>
         </div>
 
-        {/* Quantidade */}
+        {/* Estoque Atual */}
         <div className="space-y-2">
           <p className="text-sm font-medium" style={{ color: 'var(--general-80)' }}>
-            Quantidade Atual
+            Estoque Atual
           </p>
-          <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--general-40)' }}>
-            <p className="text-sm font-semibold" style={{ color: 'var(--general-80)' }}>
-              {quantity} unidade(s)
+          <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--green-30)' }}>
+            <p className="text-sm font-semibold" style={{ color: 'var(--green-90)' }}>
+              {currentQuantity} unidade(s)
             </p>
           </div>
         </div>
 
-        {/* Botões de Ação */}
-        <div className="flex space-x-3 mt-8">
-          <button
-            onClick={handleAdicionar}
-            className="flex-1 py-4 rounded-lg font-medium text-white transition-all"
-            style={{ backgroundColor: 'var(--primary-90)' }}
-          >
-            Adicionar
-          </button>
-          <button
-            onClick={handleRetirar}
-            className="flex-1 py-4 rounded-lg font-medium transition-all border"
-            style={{ 
-              color: 'var(--primary-90)', 
-              borderColor: 'var(--primary-90)',
-              backgroundColor: 'transparent'
-            }}
-          >
-            Retirar
-          </button>
+        {/* Operação */}
+        <div className="space-y-3">
+          <p className="text-sm font-medium" style={{ color: 'var(--general-80)' }}>
+            Operação
+          </p>
+          <div className="flex space-x-3">
+            <button
+              onClick={() => handleOperationChange('adicionar')}
+              className={`flex-1 py-3 rounded-lg font-medium transition-all ${
+                operation === 'adicionar' ? 'text-white' : ''
+              }`}
+              style={{ 
+                backgroundColor: operation === 'adicionar' ? 'var(--green-80)' : 'transparent',
+                color: operation === 'adicionar' ? 'white' : 'var(--green-80)',
+                border: `1px solid var(--green-80)`
+              }}
+            >
+              Adicionar
+            </button>
+            <button
+              onClick={() => handleOperationChange('retirar')}
+              className={`flex-1 py-3 rounded-lg font-medium transition-all ${
+                operation === 'retirar' ? 'text-white' : ''
+              }`}
+              style={{ 
+                backgroundColor: operation === 'retirar' ? 'var(--red-80)' : 'transparent',
+                color: operation === 'retirar' ? 'white' : 'var(--red-80)',
+                border: `1px solid var(--red-80)`
+              }}
+            >
+              Retirar
+            </button>
+          </div>
+        </div>
+
+        {/* Quantidade */}
+        <div className="space-y-2">
+          <p className="text-sm font-medium" style={{ color: 'var(--general-80)' }}>
+            Quantidade a {operation}
+          </p>
+          <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--general-40)' }}>
+            <input
+              type="number"
+              value={inputQuantity}
+              onChange={handleQuantityChange}
+              min="1"
+              max={operation === 'retirar' ? currentQuantity : undefined}
+              className="w-full bg-transparent text-sm font-medium outline-none"
+              style={{ color: 'var(--general-100)' }}
+              placeholder="Digite a quantidade"
+            />
+          </div>
         </div>
 
         {/* Botão Salvar */}
@@ -267,8 +202,7 @@ function CadastroMaterialContent() {
       <div className="fixed bottom-0 left-0 right-0 h-20 flex items-center justify-center" style={{ backgroundColor: 'var(--general-30)' }}>
         <div className="w-32 h-1 rounded" style={{ backgroundColor: 'var(--general-100)' }}></div>
       </div>
-      </div>
-    </>
+    </div>
   )
 }
 

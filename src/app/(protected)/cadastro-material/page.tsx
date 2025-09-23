@@ -10,6 +10,9 @@ function CadastroMaterialContent() {
   
   const [quantity, setQuantity] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [modalType, setModalType] = useState<'adicionar' | 'retirar' | null>(null)
+  const [modalQuantity, setModalQuantity] = useState(1)
 
   // Dados mockados baseados na imagem
   const materialData = {
@@ -22,15 +25,41 @@ function CadastroMaterialContent() {
   }
 
   const handleAdicionar = () => {
-    setQuantity(prev => prev + 1)
-    toast.success('Quantidade adicionada!')
+    setModalType('adicionar')
+    setModalQuantity(1)
+    setShowModal(true)
   }
 
   const handleRetirar = () => {
-    if (quantity > 1) {
-      setQuantity(prev => prev - 1)
-      toast.success('Quantidade removida!')
+    setModalType('retirar')
+    setModalQuantity(1)
+    setShowModal(true)
+  }
+
+  const handleConfirmModal = () => {
+    if (modalType === 'adicionar') {
+      setQuantity(prev => prev + modalQuantity)
+      toast.success(`${modalQuantity} unidade(s) adicionada(s)!`)
+    } else if (modalType === 'retirar') {
+      setQuantity(prev => Math.max(0, prev - modalQuantity))
+      toast.success(`${modalQuantity} unidade(s) retirada(s)!`)
     }
+    setShowModal(false)
+    setModalType(null)
+  }
+
+  const handleCancelModal = () => {
+    setShowModal(false)
+    setModalType(null)
+    setModalQuantity(1)
+  }
+
+  const incrementModalQuantity = () => {
+    setModalQuantity(prev => prev + 1)
+  }
+
+  const decrementModalQuantity = () => {
+    setModalQuantity(prev => Math.max(1, prev - 1))
   }
 
   const handleSalvar = async () => {
@@ -50,7 +79,87 @@ function CadastroMaterialContent() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--general-30)', fontFamily: 'var(--font-poppins)' }}>
+    <>
+      {/* Modal Overlay */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
+          <div className="rounded-xl max-w-sm w-full" style={{ backgroundColor: 'var(--general-30)' }}>
+            {/* Modal Header */}
+            <div className="p-6 text-center" style={{ backgroundColor: 'var(--primary-30)' }}>
+              <h3 className="text-lg font-semibold" style={{ color: 'var(--general-100)' }}>
+                {modalType === 'adicionar' ? 'Adicionar Material' : 'Retirar Material'}
+              </h3>
+              <p className="text-sm mt-1" style={{ color: 'var(--general-70)' }}>
+                Selecione a quantidade
+              </p>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 space-y-6">
+              {/* Quantity Selector */}
+              <div className="text-center">
+                <p className="text-sm font-medium mb-4" style={{ color: 'var(--general-80)' }}>
+                  Quantidade
+                </p>
+                <div className="flex items-center justify-center space-x-4">
+                  <button
+                    onClick={decrementModalQuantity}
+                    className="w-10 h-10 rounded-lg border font-medium transition-all"
+                    style={{ 
+                      color: 'var(--primary-90)', 
+                      borderColor: 'var(--primary-90)',
+                      backgroundColor: 'transparent'
+                    }}
+                  >
+                    -
+                  </button>
+                  <span className="text-2xl font-bold w-16 text-center" style={{ color: 'var(--general-100)' }}>
+                    {modalQuantity}
+                  </span>
+                  <button
+                    onClick={incrementModalQuantity}
+                    className="w-10 h-10 rounded-lg border font-medium transition-all"
+                    style={{ 
+                      color: 'var(--primary-90)', 
+                      borderColor: 'var(--primary-90)',
+                      backgroundColor: 'transparent'
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal Buttons */}
+              <div className="flex space-x-3">
+                <button
+                  onClick={handleCancelModal}
+                  className="flex-1 py-3 rounded-lg font-medium border transition-all"
+                  style={{ 
+                    color: 'var(--general-80)', 
+                    borderColor: 'var(--general-60)',
+                    backgroundColor: 'transparent'
+                  }}
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleConfirmModal}
+                  className="flex-1 py-3 rounded-lg font-medium text-white transition-all"
+                  style={{ 
+                    backgroundColor: modalType === 'adicionar' ? 'var(--green-80)' : 'var(--red-80)'
+                  }}
+                >
+                  {modalType === 'adicionar' ? 'Adicionar' : 'Retirar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--general-30)', fontFamily: 'var(--font-poppins)' }}>
       {/* Header */}
       <div className="px-6 py-8">
         <h1 className="text-2xl font-bold" style={{ color: 'var(--general-100)' }}>
@@ -112,11 +221,11 @@ function CadastroMaterialContent() {
         {/* Quantidade */}
         <div className="space-y-2">
           <p className="text-sm font-medium" style={{ color: 'var(--general-80)' }}>
-            Quantidade
+            Quantidade Atual
           </p>
           <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--general-40)' }}>
-            <p className="text-sm" style={{ color: 'var(--general-80)' }}>
-              Você deixa digitavel
+            <p className="text-sm font-semibold" style={{ color: 'var(--general-80)' }}>
+              {quantity} unidade(s)
             </p>
           </div>
         </div>
@@ -158,7 +267,8 @@ function CadastroMaterialContent() {
       <div className="fixed bottom-0 left-0 right-0 h-20 flex items-center justify-center" style={{ backgroundColor: 'var(--general-30)' }}>
         <div className="w-32 h-1 rounded" style={{ backgroundColor: 'var(--general-100)' }}></div>
       </div>
-    </div>
+      </div>
+    </>
   )
 }
 

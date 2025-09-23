@@ -6,6 +6,12 @@ import GlobalProvider from "@/contexts/GlobalContext";
 export const metadata: Metadata = {
   title: "StockExpress",
   description: "AppWeb",
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+  },
 };
 
 export default function RootLayout({

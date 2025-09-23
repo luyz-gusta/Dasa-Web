@@ -18,14 +18,18 @@ export const GlobalContext = createContext<GlobalContextType | undefined>(
 );
 
 export default function GlobalProvider({ children }: GlobalProviderProps) {
-  const [isTablet, setIsTablet] = useState<boolean>(window.innerWidth <= 1024);
-  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
+  const [isTablet, setIsTablet] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
+    // Definir valores iniciais apenas no cliente
     const handleResize = () => {
       setIsTablet(window.innerWidth <= 1024);
       setIsMobile(window.innerWidth <= 768);
     };
+
+    // Definir valores iniciais
+    handleResize();
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);

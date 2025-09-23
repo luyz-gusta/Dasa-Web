@@ -36,6 +36,14 @@ function CadastroMaterialContent() {
   }
 
   const handleSalvar = async () => {
+    // Validação para operação de retirar
+    if (operation === 'retirar' && inputQuantity > currentQuantity) {
+      toast.error('Ação não possível!', {
+        description: `Não é possível retirar ${inputQuantity} unidades. Estoque atual: ${currentQuantity} unidades.`
+      })
+      return
+    }
+
     setIsLoading(true)
     
     try {
@@ -126,8 +134,8 @@ function CadastroMaterialContent() {
           <p className="text-sm font-medium" style={{ color: 'var(--general-80)' }}>
             Estoque Atual
           </p>
-          <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--green-30)' }}>
-            <p className="text-sm font-semibold" style={{ color: 'var(--green-90)' }}>
+          <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--primary-30)' }}>
+            <p className="text-sm font-semibold" style={{ color: 'var(--primary-90)' }}>
               {currentQuantity} unidade(s)
             </p>
           </div>
@@ -145,9 +153,9 @@ function CadastroMaterialContent() {
                 operation === 'adicionar' ? 'text-white' : ''
               }`}
               style={{ 
-                backgroundColor: operation === 'adicionar' ? 'var(--green-80)' : 'transparent',
-                color: operation === 'adicionar' ? 'white' : 'var(--green-80)',
-                border: `1px solid var(--green-80)`
+                backgroundColor: operation === 'adicionar' ? 'var(--primary-90)' : 'transparent',
+                color: operation === 'adicionar' ? 'white' : 'var(--primary-90)',
+                border: `1px solid var(--primary-90)`
               }}
             >
               Adicionar
@@ -173,7 +181,13 @@ function CadastroMaterialContent() {
           <p className="text-sm font-medium" style={{ color: 'var(--general-80)' }}>
             Quantidade a {operation}
           </p>
-          <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--general-40)' }}>
+          <div 
+            className="px-4 py-3 rounded-lg border" 
+            style={{ 
+              backgroundColor: 'var(--general-40)',
+              borderColor: operation === 'retirar' && inputQuantity > currentQuantity ? 'var(--red-70)' : 'transparent'
+            }}
+          >
             <input
               type="number"
               value={inputQuantity}
@@ -185,14 +199,26 @@ function CadastroMaterialContent() {
               placeholder="Digite a quantidade"
             />
           </div>
+          {operation === 'retirar' && inputQuantity > currentQuantity && (
+            <p className="text-xs mt-1" style={{ color: 'var(--red-80)' }}>
+              Quantidade não pode ser maior que o estoque atual ({currentQuantity} unidades)
+            </p>
+          )}
         </div>
 
         {/* Botão Salvar */}
         <button
           onClick={handleSalvar}
-          disabled={isLoading}
+          disabled={isLoading || (operation === 'retirar' && inputQuantity > currentQuantity) || inputQuantity <= 0}
           className="w-full py-4 rounded-lg font-medium text-white mt-6 transition-all"
-          style={{ backgroundColor: 'var(--primary-90)' }}
+          style={{ 
+            backgroundColor: (isLoading || (operation === 'retirar' && inputQuantity > currentQuantity) || inputQuantity <= 0) 
+              ? 'var(--general-60)' 
+              : 'var(--primary-90)',
+            cursor: (isLoading || (operation === 'retirar' && inputQuantity > currentQuantity) || inputQuantity <= 0) 
+              ? 'not-allowed' 
+              : 'pointer'
+          }}
         >
           {isLoading ? 'Salvando...' : 'Salvar'}
         </button>

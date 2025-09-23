@@ -3,100 +3,172 @@
 import { useQRCodeScanner } from "@/hooks/useQRCodeScanner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function QRCodeReader() {
-  const { result, isScanning, error, scannerRef, startScanning, stopScanning, resetResult } = useQRCodeScanner({
+  const [autoStart, setAutoStart] = useState(true);
+  
+  const { 
+    result, 
+    isScanning, 
+    error, 
+    lastDetectedAt,
+    availableCameras,
+    startScanner, 
+    stopScanner, 
+    switchCamera,
+    resetResult 
+  } = useQRCodeScanner({
     onResult: (data) => {
-      console.log('QR Code detectado:', data);
+      toast.success("QR Code detectado!", {
+        description: "Conteúdo copiado automaticamente",
+      });
+      // Copiar para clipboard automaticamente
+      navigator.clipboard.writeText(data).catch(console.error);
+    },
+    onError: (errorMsg) => {
+      toast.error("Erro no scanner", {
+        description: errorMsg
+      });
     }
   });
 
+  // Auto-iniciar o scanner quando o componente montar
   useEffect(() => {
-    // Cleanup quando o componente é desmontado
-    return () => {
-      stopScanning();
-    };
-  }, [stopScanning]);
+    if (autoStart && !isScanning && !result) {
+      const timer = setTimeout(() => {
+        startScanner();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [autoStart, isScanning, result, startScanner]);
+
+  const handleToggleScanner = () => {
+    if (isScanning) {
+      stopScanner();
+    } else {
+      startScanner();
+    }
+  };
+
+  const handleNewScan = () => {
+    resetResult();
+    setAutoStart(true);
+  };
+
+  const formatTimestamp = (date: Date) => {
+    return date.toLocaleTimeString('pt-BR', { 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit' 
+    });
+  };
 
   return (
-    <Card className="w-full max-w-2xl">
-      <CardHeader>
-        <CardTitle>📱 Leitor de QR Code</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
-          </div>
-        )}
-
-        {result && (
-          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4">
-            <strong>QR Code detectado:</strong>
-            <div className="mt-2 p-2 bg-white rounded border text-sm break-all">
-              {result}
-            </div>
-          </div>
-        )}
-
-        <div className="relative mb-4">
-          {!result ? (
-            <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-              {isScanning ? (
-                <div 
-                  ref={scannerRef} 
-                  id="qr-reader" 
-                  className="w-full h-full"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-500">
-                  <div className="text-center">
-                    <div className="text-6xl mb-4">📱</div>
-                    <p>Clique em &quot;Iniciar Scanner&quot; para começar</p>
-                  </div>
+    <div className="w-full max-w-md mx-auto">
+      {/* Scanner Area */}
+      <Card className="mb-4">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg text-center">Scanner QR Code</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Camera Preview */}
+          <div className="relative">
+            <div 
+              id="qr-reader" 
+              className="w-full aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 border-dashed border-gray-300"
+            />
+            
+            {/* Overlay quando não está escaneando */}
+            {!isScanning && !result && (
+              <div className="absolute inset-0 bg-gray-50 bg-opacity-90 flex items-center justify-center rounded-lg">
+                <div className="text-center">
+                  <div className="text-4xl mb-2">📱</div>
+                  <p className="text-sm text-gray-600">
+                    Toque em Iniciar para começar
+                  </p>
                 </div>
-              )}
-            </div>
-          ) : (
-            <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
-              <div className="text-center text-gray-600">
-                <div className="text-6xl mb-4">✅</div>
-                <p>QR Code escaneado com sucesso!</p>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        <div className="flex gap-2 flex-wrap">
-          {!result ? (
+          {/* Controls */}
+          <div className="flex gap-2">
             <Button
-              onClick={isScanning ? stopScanning : startScanning}
+              onClick={handleToggleScanner}
               className="flex-1"
               variant={isScanning ? "destructive" : "default"}
             >
-              {isScanning ? '⏹️ Parar Scanner' : '▶️ Iniciar Scanner'}
+              {isScanning ? "Parar" : "Iniciar"}
             </Button>
-          ) : (
-            <>
-              <Button onClick={resetResult} variant="outline" className="flex-1">
-                🔄 Novo Scan
-              </Button>
-              <Button 
-                onClick={() => {
-                  // Copiar resultado para clipboard
-                  navigator.clipboard.writeText(result).then(() => {
-                    console.log('QR Code copiado para o clipboard');
-                  });
-                }}
-                className="flex-1"
+            
+            {availableCameras.length > 1 && (
+              <Button
+                onClick={switchCamera}
+                variant="outline"
+                disabled={!isScanning}
               >
-                📋 Copiar
+                Trocar
               </Button>
-            </>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Result Display */}
+      {result && (
+        <Card className="mb-4">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base text-green-600">QR Code Detectado</CardTitle>
+            {lastDetectedAt && (
+              <p className="text-xs text-gray-500">
+                {formatTimestamp(lastDetectedAt)}
+              </p>
+            )}
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="p-3 bg-gray-50 rounded-md border">
+              <p className="text-sm break-all">{result}</p>
+            </div>
+            
+            <div className="flex gap-2">
+              <Button
+                onClick={() => navigator.clipboard.writeText(result)}
+                variant="outline"
+                className="flex-1"
+                size="sm"
+              >
+                Copiar
+              </Button>
+              <Button
+                onClick={handleNewScan}
+                className="flex-1"
+                size="sm"
+              >
+                Novo Scan
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Error Display */}
+      {error && (
+        <Card className="border-red-200">
+          <CardContent className="pt-4">
+            <div className="p-3 bg-red-50 text-red-700 rounded-md text-sm">
+              {error}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Instructions */}
+      <div className="text-center text-xs text-gray-500 mt-4">
+        <p>Aponte a câmera para um QR Code</p>
+        <p>O conteúdo será detectado automaticamente</p>
+      </div>
+    </div>
   );
 }

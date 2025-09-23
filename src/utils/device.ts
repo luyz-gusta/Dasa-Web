@@ -1,5 +1,4 @@
 import { headers } from "next/headers";
-
 interface DeviceInfo {
   isMobile: boolean;
   isTablet: boolean;
@@ -12,6 +11,7 @@ export async function device(): Promise<DeviceInfo> {
   const headersList = await headers();
   const userAgent = headersList.get("user-agent") || "";
 
+  // Tablet patterns (more specific than mobile)
   const tabletPatterns = [
     /iPad/i,
     /Android(?=.*\bTablet\b)/i,
@@ -21,6 +21,7 @@ export async function device(): Promise<DeviceInfo> {
     /PlayBook/i,
   ];
 
+  // Mobile patterns (excluding tablets)
   const mobilePatterns = [
     /Android(?!.*Tablet)/i,
     /webOS/i,

@@ -1,11 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
   /*Fonts*/
-  --font-poppins: "Poppins", sans-serif;
+  --font-raleway: "Raleway", sans-serif;
   --font-inter: "Inter", sans-serif;
 
   /*Dasa*/
@@ -77,7 +76,7 @@
 
 @theme inline {
   /* Fonts */
-  --font-poppins: var(--font-poppins);
+  --font-raleway: var(--font-raleway);
   --font-inter: var(--font-inter);
 
   --font-size-h1: 8rem;
@@ -146,4 +145,47 @@
   --color-yellow-80: var(--yellow-80);
   --color-yellow-90: var(--yellow-90);
   --color-yellow-100: var(--yellow-100);
+}
+
+@utility text-h1 {
+  font-size: var(--font-size-h1);
+  font-weight: 700;
+}
+
+@utility text-h2 {
+  font-size: var(--font-size-h2);
+  font-weight: 700;
+}
+
+@utility text-h3 {
+  font-size: var(--font-size-h3);
+  font-weight: 700;
+}
+
+@utility text-h4 {
+  font-size: var(--font-size-h4);
+  font-weight: 700;
+}
+
+@utility text-h5 {
+  font-size: var(--font-size-h5);
+}
+
+@layer components {
+
+  h1 {
+    @apply text-h1;
+  }
+
+  h2 {
+    @apply text-h2;
+  }
+
+  h4 {
+    @apply text-h4;
+  }
+
+  h5 {
+    @apply text-h5;
+  }
 }

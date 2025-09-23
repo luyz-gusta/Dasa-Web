@@ -1,55 +1,60 @@
-# Página de Webcam
+# Scanner de QR Code - Mobile First
 
 ## Funcionalidades
 
-### 📷 Captura de Webcam
-- Acesso à câmera do dispositivo
-- Troca entre câmera frontal e traseira (dispositivos móveis)
-- Captura de imagens em alta qualidade (1280x720)
-- Download das imagens capturadas
-- Tratamento de erros de permissão
+### � Scanner de QR Code em Tempo Real
+- Detecção automática e contínua de QR codes via webcam
+- Troca automática entre câmeras frontal e traseira
+- Cópia automática do resultado para clipboard
+- Interface minimalista otimizada para dispositivos móveis
+- Feedback em tempo real com toast notifications
+- Auto-inicialização do scanner
 
-### 📱 Leitor de QR Code  
-- Scanner automático de QR codes
-- Detecção em tempo real
-- Exibição do conteúdo decodificado
-- Cópia do resultado para clipboard
-- Interface adaptativa
+## Design Principles
+
+- **Mobile First**: Interface otimizada para smartphones
+- **Minimalista**: Design clean sem ícones desnecessários  
+- **Acessível**: Controles grandes e fáceis de usar
+- **Responsivo**: Adapta-se a diferentes tamanhos de tela
 
 ## Tecnologias Utilizadas
 
-- **react-webcam**: Captura de webcam compatível com Next.js
-- **html5-qrcode**: Leitor QR code robusto e confiável
-- **Hooks personalizados**: useWebcam e useQRCodeScanner
-- **Design responsivo**: Layouts diferentes para desktop e mobile
-- **shadcn/ui**: Componentes UI consistentes com o projeto
+- **html5-qrcode**: Scanner QR robusto e performático
+- **sonner**: Toast notifications elegantes
+- **Hooks personalizados**: useQRCodeScanner para lógica reutilizável
+- **TypeScript**: Tipagem segura em toda aplicação
+- **shadcn/ui**: Componentes UI consistentes
 
-## Estrutura de Arquivos
+## Estrutura Simplificada
 
 ```
 src/app/(protected)/webcam/
-├── page.tsx                   # Página principal com device detection
+├── page.tsx                   # Página principal otimizada para mobile
 ├── components/
-│   ├── DesktopLayout.tsx      # Layout para desktop
-│   ├── MobileLayout.tsx       # Layout para mobile  
-│   ├── WebcamCapture.tsx      # Componente de captura
-│   ├── QRCodeReader.tsx       # Componente leitor QR
-│   └── WebcamControls.tsx     # Controles de navegação
+│   └── QRCodeReader.tsx       # Componente principal do scanner
+└── README.md                  # Documentação
 
 src/hooks/
-├── useWebcam.ts               # Hook para lógica da webcam
-└── useQRCodeScanner.ts        # Hook para lógica do QR scanner
+└── useQRCodeScanner.ts        # Hook com lógica do scanner
 ```
 
 ## Como Usar
 
 1. Acesse `/webcam` (requer autenticação)
-2. Use os botões para alternar entre "Webcam" e "QR Code"
-3. Para webcam: clique em "Capturar" para tirar foto
-4. Para QR: clique em "Iniciar Scanner" para começar a leitura
-5. Use os controles para gerenciar capturas/resultados
+2. O scanner inicia automaticamente
+3. Aponte a câmera para um QR Code
+4. O conteúdo é detectado e copiado automaticamente
+5. Use "Trocar" para alternar entre câmeras (se disponível)
+6. Use "Novo Scan" para escanear outro código
+
+## Funcionalidades Automáticas
+
+- **Auto-start**: Scanner inicia automaticamente ao carregar
+- **Auto-copy**: Resultado copiado para clipboard automaticamente
+- **Auto-detect**: Detecção contínua sem necessidade de captura manual
+- **Smart camera**: Prefere câmera traseira em dispositivos móveis
 
 ## Permissões Necessárias
 
 - Acesso à câmera do navegador
-- Permissões de escrita para download de imagens
+- Permissão para usar clipboard (cópia automática)

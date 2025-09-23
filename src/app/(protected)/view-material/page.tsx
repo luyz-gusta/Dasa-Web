@@ -15,7 +15,7 @@ const generateRandomCode = () => {
 // Dados mockados baseados na imagem
 const materialData = {
   insumo: "Luva Médica",
-  responsavel: "João Vitor",
+  responsavel: "Leticia",
   data: "22/09/2025",
   tipo: "EPI - Equipamento de proteção Individual",
   local: "Hospital São Luiz",

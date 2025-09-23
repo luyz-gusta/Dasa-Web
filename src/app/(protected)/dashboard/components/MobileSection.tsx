@@ -1,9 +1,36 @@
+'use client'
 import NavbarMobile from "@/components/common/NavbarMobile";
 import IPen from "@/components/icons/Pen";
 import { insumosData } from "@/mock/insumos";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+
+// Função para obter data e hora atual no formato brasileiro
+const getCurrentDateTimeBR = (): string => {
+  const now = new Date();
+  
+  const day = String(now.getDate()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Mês começa em 0
+  const year = now.getFullYear();
+  
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  
+  return `${day}/${month}/${year}, ${hours}:${minutes}`;
+};
 
 export default function MobileSection() {
+  const [insumos, setInsumos] = useState(insumosData)
+  
+  useEffect(() => {
+    const storage = localStorage.getItem('insumos')
+    if(storage){
+      setInsumos(JSON.parse(storage))
+    }else{
+      setInsumos(insumosData)
+    }
+  }, [])
+
   return (
     <div className="relative flex flex-col justify-between w-full min-h-screen">
       <Image
@@ -34,7 +61,7 @@ export default function MobileSection() {
 
         {/* Cards Grid */}
         <section className="z-2 gap-4 grid grid-cols-2">
-          {insumosData.map((insumo) => {
+          {insumos.map((insumo) => {
             // Função para determinar as cores do status
             const getStatusColors = (statusColor: string) => {
               switch (statusColor) {

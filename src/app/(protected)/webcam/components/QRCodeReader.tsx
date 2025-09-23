@@ -1,8 +1,6 @@
 'use client'
 
 import { useQRCodeScanner } from "@/hooks/useQRCodeScanner";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -158,30 +156,32 @@ export default function QRCodeReader() {
       )} */}
 
       {/* Scanner Area */}
-      <Card className="mb-4">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-lg text-center">Scanner QR Code</CardTitle>
-          <p className="text-sm text-gray-600 text-center">
+      <div className="mb-6 rounded-xl overflow-hidden" style={{ backgroundColor: 'var(--general-40)', border: '1px solid var(--general-50)' }}>
+        <div className="p-6 text-center" style={{ backgroundColor: 'var(--primary-30)' }}>
+          <h2 className="text-lg font-semibold mb-2" style={{ color: 'var(--general-100)' }}>Scanner QR Code</h2>
+          <p className="text-sm" style={{ color: 'var(--general-70)' }}>
             Escaneie para cadastrar material médico
           </p>
-        </CardHeader>
-        <CardContent className="space-y-4">
+        </div>
+        
+        <div className="p-6 space-y-4">
           {/* Camera Preview */}
           <div className="relative">
             <div 
               id="qr-reader" 
-              className="w-full aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 border-dashed border-gray-300"
+              className="w-full aspect-square rounded-lg overflow-hidden border-2 border-dashed"
+              style={{ backgroundColor: 'var(--general-30)', borderColor: 'var(--general-60)' }}
             />
             
             {/* Overlay quando não está escaneando */}
             {!isScanning && !result && (
-              <div className="absolute inset-0 bg-gray-50 bg-opacity-90 flex items-center justify-center rounded-lg">
+              <div className="absolute inset-0 bg-opacity-90 flex items-center justify-center rounded-lg" style={{ backgroundColor: 'var(--general-30)' }}>
                 <div className="text-center">
                   <div className="text-4xl mb-2">🏥</div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm" style={{ color: 'var(--general-70)' }}>
                     Toque em Iniciar para escanear
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs mt-1" style={{ color: 'var(--general-60)' }}>
                     Material médico
                   </p>
                 </div>
@@ -190,73 +190,84 @@ export default function QRCodeReader() {
           </div>
 
           {/* Controls */}
-          <div className="flex gap-2">
-            <Button
+          <div className="flex gap-3">
+            <button
               onClick={handleToggleScanner}
-              className="flex-1"
-              variant={isScanning ? "destructive" : "default"}
+              className="flex-1 py-3 rounded-lg font-medium text-white transition-all"
+              style={{ backgroundColor: isScanning ? 'var(--red-80)' : 'var(--primary-90)' }}
             >
               {isScanning ? "Parar" : "Iniciar"}
-            </Button>
+            </button>
             
             {availableCameras.length > 1 && (
-              <Button
+              <button
                 onClick={switchCamera}
-                variant="outline"
                 disabled={!isScanning}
+                className="px-4 py-3 rounded-lg font-medium border transition-all"
+                style={{ 
+                  color: 'var(--primary-90)', 
+                  borderColor: 'var(--primary-90)',
+                  backgroundColor: 'transparent',
+                  opacity: !isScanning ? 0.5 : 1
+                }}
               >
                 Trocar
-              </Button>
+              </button>
             )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Result Display - Simplificado */}
       {result && (
-        <Card className="mb-4">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base text-green-600">QR Code Detectado</CardTitle>
+        <div className="mb-6 rounded-xl overflow-hidden" style={{ backgroundColor: 'var(--green-30)', border: '1px solid var(--green-50)' }}>
+          <div className="p-4 text-center" style={{ backgroundColor: 'var(--green-40)' }}>
+            <h3 className="text-base font-semibold" style={{ color: 'var(--green-90)' }}>QR Code Detectado</h3>
             {lastDetectedAt && (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs mt-1" style={{ color: 'var(--green-70)' }}>
                 {formatTimestamp(lastDetectedAt)}
               </p>
             )}
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="p-3 bg-gray-50 rounded-md border">
-              <p className="text-sm break-all">{result}</p>
+          </div>
+          
+          <div className="p-4 space-y-3">
+            <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--general-30)' }}>
+              <p className="text-sm break-all" style={{ color: 'var(--general-80)' }}>{result}</p>
             </div>
             
             <div className="text-center">
-              <p className="text-sm text-blue-600 mb-3">
+              <p className="text-sm mb-3" style={{ color: 'var(--primary-80)' }}>
                 Redirecionando para cadastro...
               </p>
-              <Button
+              <button
                 onClick={handleNewScan}
-                variant="outline"
-                size="sm"
+                className="px-4 py-2 rounded-lg font-medium border transition-all"
+                style={{ 
+                  color: 'var(--general-80)', 
+                  borderColor: 'var(--general-60)',
+                  backgroundColor: 'transparent'
+                }}
               >
                 Cancelar
-              </Button>
+              </button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* Error Display */}
       {error && (
-        <Card className="border-red-200">
-          <CardContent className="pt-4">
-            <div className="p-3 bg-red-50 text-red-700 rounded-md text-sm">
+        <div className="mb-4 rounded-xl overflow-hidden" style={{ backgroundColor: 'var(--red-30)', border: '1px solid var(--red-50)' }}>
+          <div className="p-4">
+            <div className="p-3 rounded-lg text-sm" style={{ backgroundColor: 'var(--red-40)', color: 'var(--red-90)' }}>
               {error}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* Instructions */}
-      <div className="text-center text-xs text-gray-500 mt-4">
+      <div className="text-center text-xs mt-6 space-y-1" style={{ color: 'var(--general-60)' }}>
         <p>Aponte a câmera para um QR Code de material médico</p>
         <p>O sistema redirecionará automaticamente para o cadastro</p>
       </div>

@@ -5,16 +5,16 @@ import { Toaster } from "sonner";
 
 export default function Webcam() {
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen p-6" style={{ backgroundColor: 'var(--general-30)', fontFamily: 'var(--font-poppins)' }}>
       <Toaster position="top-center" />
       
       <div className="max-w-md mx-auto pt-8">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--general-100)' }}>
             Scanner QR Code
           </h1>
-          <p className="text-gray-600 text-sm">
-            Escaneie códigos QR de forma rápida e fácil
+          <p className="text-sm" style={{ color: 'var(--general-70)' }}>
+            Escaneie códigos QR de materiais médicos
           </p>
         </div>
         

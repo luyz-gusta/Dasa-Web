@@ -1,7 +1,24 @@
 'use client'
 
+import NavbarMobile from '@/components/common/NavbarMobile'
+import Image from 'next/image'
 import { useState, Suspense } from 'react'
 import { toast } from 'sonner'
+
+// Gerar código aleatório para código de barras
+const generateRandomCode = () => {
+  return Math.floor(Math.random() * 900000000000) + 100000000000 // Gera número de 12 dígitos
+}
+
+// Dados mockados baseados na imagem
+const materialData = {
+  insumo: 'Luva Médica',
+  responsavel: 'João Vitor',
+  data: '22/09/2025',
+  tipo: 'EPI - Equipamento de proteção Individual',
+  local: 'Hospital São Luiz',
+  codigo: generateRandomCode().toString()
+}
 
 function CadastroMaterialContent() {
   // QR code data não é mais usado, geramos código aleatório
@@ -11,20 +28,7 @@ function CadastroMaterialContent() {
   const [operation, setOperation] = useState<'adicionar' | 'retirar'>('adicionar') // Operação selecionada
   const [isLoading, setIsLoading] = useState(false)
 
-  // Gerar código aleatório para código de barras
-  const generateRandomCode = () => {
-    return Math.floor(Math.random() * 900000000000) + 100000000000 // Gera número de 12 dígitos
-  }
-
-  // Dados mockados baseados na imagem
-  const materialData = {
-    insumo: 'Luva Médica',
-    responsavel: 'João Vitor',
-    data: '22/09/2025',
-    tipo: 'EPI - Equipamento de proteção Individual',
-    local: 'Hospital São Luiz',
-    codigo: generateRandomCode().toString()
-  }
+  
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 0
@@ -70,32 +74,39 @@ function CadastroMaterialContent() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--general-30)', fontFamily: 'var(--font-poppins)' }}>
+    <div className="relative min-h-screen" style={{ backgroundColor: 'var(--general-30)', fontFamily: 'var(--font-poppins)' }}>
+      <Image
+        src="/bubbles.png"
+        alt="logo"
+        width={500}
+        height={500}
+        className="top-0 right-0 z-0 absolute"
+      />
       {/* Header */}
-      <div className="px-6 py-8">
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--general-100)' }}>
+      <div className="z-2 px-6 py-8">
+        <h1 className="font-bold text-2xl" style={{ color: 'var(--general-100)' }}>
           Insumo
         </h1>
-        <p className="text-lg mt-1" style={{ color: 'var(--general-80)' }}>
+        <p className="mt-1 text-lg" style={{ color: 'var(--general-80)' }}>
           {materialData.responsavel}
         </p>
       </div>
 
       {/* Content */}
-      <div className="px-6 space-y-6 pb-32">
+      <div className="z-2 space-y-6 px-6 pb-32">
         {/* Data */}
         <div>
-          <p className="text-sm font-medium mb-1" style={{ color: 'var(--general-80)' }}>
+          <p className="mb-1 font-medium text-sm" style={{ color: 'var(--general-80)' }}>
             {materialData.data}
           </p>
-          <h2 className="text-xl font-semibold" style={{ color: 'var(--general-100)' }}>
+          <h2 className="font-semibold text-xl" style={{ color: 'var(--general-100)' }}>
             {materialData.insumo}
           </h2>
         </div>
 
         {/* Tipo de Material */}
         <div className="space-y-2">
-          <p className="text-sm font-medium" style={{ color: 'var(--general-80)' }}>
+          <p className="font-medium text-sm" style={{ color: 'var(--general-80)' }}>
             Tipo de Material
           </p>
           <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--primary-30)' }}>
@@ -107,7 +118,7 @@ function CadastroMaterialContent() {
 
         {/* Local */}
         <div className="space-y-2">
-          <p className="text-sm font-medium" style={{ color: 'var(--general-80)' }}>
+          <p className="font-medium text-sm" style={{ color: 'var(--general-80)' }}>
             Local
           </p>
           <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--primary-30)' }}>
@@ -119,7 +130,7 @@ function CadastroMaterialContent() {
 
         {/* Código de barras */}
         <div className="space-y-2">
-          <p className="text-sm font-medium" style={{ color: 'var(--general-80)' }}>
+          <p className="font-medium text-sm" style={{ color: 'var(--general-80)' }}>
             Código de barras
           </p>
           <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--general-40)' }}>
@@ -131,11 +142,11 @@ function CadastroMaterialContent() {
 
         {/* Estoque Atual */}
         <div className="space-y-2">
-          <p className="text-sm font-medium" style={{ color: 'var(--general-80)' }}>
+          <p className="font-medium text-sm" style={{ color: 'var(--general-80)' }}>
             Estoque Atual
           </p>
           <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--primary-30)' }}>
-            <p className="text-sm font-semibold" style={{ color: 'var(--primary-90)' }}>
+            <p className="font-semibold text-sm" style={{ color: 'var(--primary-90)' }}>
               {currentQuantity} unidade(s)
             </p>
           </div>
@@ -143,7 +154,7 @@ function CadastroMaterialContent() {
 
         {/* Operação */}
         <div className="space-y-3">
-          <p className="text-sm font-medium" style={{ color: 'var(--general-80)' }}>
+          <p className="font-medium text-sm" style={{ color: 'var(--general-80)' }}>
             Operação
           </p>
           <div className="flex space-x-3">
@@ -178,11 +189,11 @@ function CadastroMaterialContent() {
 
         {/* Quantidade */}
         <div className="space-y-2">
-          <p className="text-sm font-medium" style={{ color: 'var(--general-80)' }}>
+          <p className="font-medium text-sm" style={{ color: 'var(--general-80)' }}>
             Quantidade a {operation}
           </p>
           <div 
-            className="px-4 py-3 rounded-lg border" 
+            className="px-4 py-3 border rounded-lg" 
             style={{ 
               backgroundColor: 'var(--general-40)',
               borderColor: operation === 'retirar' && inputQuantity > currentQuantity ? 'var(--red-70)' : 'transparent'
@@ -194,13 +205,13 @@ function CadastroMaterialContent() {
               onChange={handleQuantityChange}
               min="1"
               max={operation === 'retirar' ? currentQuantity : undefined}
-              className="w-full bg-transparent text-sm font-medium outline-none"
+              className="bg-transparent outline-none w-full font-medium text-sm"
               style={{ color: 'var(--general-100)' }}
               placeholder="Digite a quantidade"
             />
           </div>
           {operation === 'retirar' && inputQuantity > currentQuantity && (
-            <p className="text-xs mt-1" style={{ color: 'var(--red-80)' }}>
+            <p className="mt-1 text-xs" style={{ color: 'var(--red-80)' }}>
               Quantidade não pode ser maior que o estoque atual ({currentQuantity} unidades)
             </p>
           )}
@@ -210,7 +221,7 @@ function CadastroMaterialContent() {
         <button
           onClick={handleSalvar}
           disabled={isLoading || (operation === 'retirar' && inputQuantity > currentQuantity) || inputQuantity <= 0}
-          className="w-full py-4 rounded-lg font-medium text-white mt-6 transition-all"
+          className="mt-6 py-4 rounded-lg w-full font-medium text-white transition-all"
           style={{ 
             backgroundColor: (isLoading || (operation === 'retirar' && inputQuantity > currentQuantity) || inputQuantity <= 0) 
               ? 'var(--general-60)' 
@@ -225,9 +236,7 @@ function CadastroMaterialContent() {
       </div>
 
       {/* Bottom Navigation Indicator */}
-      <div className="fixed bottom-0 left-0 right-0 h-20 flex items-center justify-center" style={{ backgroundColor: 'var(--general-30)' }}>
-        <div className="w-32 h-1 rounded" style={{ backgroundColor: 'var(--general-100)' }}></div>
-      </div>
+      <NavbarMobile />
     </div>
   )
 }
@@ -235,7 +244,7 @@ function CadastroMaterialContent() {
 export default function CadastroMaterialPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--general-30)' }}>
+      <div className="flex justify-center items-center min-h-screen" style={{ backgroundColor: 'var(--general-30)' }}>
         <div className="text-center" style={{ color: 'var(--general-80)' }}>
           <p>Carregando...</p>
         </div>

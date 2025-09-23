@@ -1,10 +1,7 @@
-import ICam from "@/components/icons/Cam";
-import IHome from "@/components/icons/Home";
+import NavbarMobile from "@/components/common/NavbarMobile";
 import IPen from "@/components/icons/Pen";
-import IUser from "@/components/icons/User";
 import { insumosData } from "@/mock/insumos";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function MobileSection() {
   return (
@@ -72,21 +69,8 @@ export default function MobileSection() {
           })}
         </section>
       </main>
-      <nav className="bottom-0 fixed bg-[#FFFFFF] shadow-[0_-1px_1px_0_rgba(0,0,0,0.16)] px-8 py-4 w-full">
-        <div className="relative flex justify-between items-center">
-          <Link href="/dashboard" className="text-primary-100">
-            <IHome width={32} height={32} />
-          </Link>
-          <Link href="/dashboard" className="left-1/2 absolute -translate-x-1/2 transform">
-            <div className="bottom-0 left-1/2 absolute bg-primary-100 p-6 rounded-full text-general-30 -translate-x-1/2 transform">
-              <ICam width={32} height={32} />
-            </div>
-          </Link>
-          <Link href="/" className="text-primary-100 cursor-pointer">
-            <IUser width={32} height={32} />
-          </Link>
-        </div>
-      </nav>
+      <NavbarMobile />
     </div>
   );
 }
+

@@ -78,6 +78,14 @@ export function useQRCodeScanner({
     setResult(decodedText);
     setLastDetectedAt(new Date());
     onResult?.(decodedText);
+    
+    // Para o scanner após detectar para evitar múltiplas detecções
+    setTimeout(() => {
+      if (scannerRef.current && scannerRef.current.isScanning) {
+        scannerRef.current.stop().catch(console.error);
+        setIsScanning(false);
+      }
+    }, 100);
   }, [onResult]);
 
   const handleScanError = useCallback((errorMessage: string) => {

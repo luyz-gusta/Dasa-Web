@@ -1,6 +1,6 @@
 import { SVGProps } from "@/types/SVGProps";
 
-export default function UserIcon(props: SVGProps) {
+export default function PackageIcon(props: SVGProps) {
   return (
     <svg
       width="24"
@@ -11,17 +11,7 @@ export default function UserIcon(props: SVGProps) {
       {...props}
     >
       <path
-        d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      <circle
-        cx="12"
-        cy="7"
-        r="4"
+        d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"

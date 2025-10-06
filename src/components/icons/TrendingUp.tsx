@@ -1,6 +1,6 @@
 import { SVGProps } from "@/types/SVGProps";
 
-export default function UserIcon(props: SVGProps) {
+export default function TrendingUpIcon(props: SVGProps) {
   return (
     <svg
       width="24"
@@ -10,18 +10,16 @@ export default function UserIcon(props: SVGProps) {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <path
-        d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+      <polyline
+        points="23 6 13.5 15.5 8.5 10.5 1 18"
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
         fill="none"
       />
-      <circle
-        cx="12"
-        cy="7"
-        r="4"
+      <polyline
+        points="17 6 23 6 23 12"
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"

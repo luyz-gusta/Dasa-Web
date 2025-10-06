@@ -1,14 +1,14 @@
+'use client'
+
+import { useGlobalContext } from "@/hooks/useGlobalContext";
+import DesktopSection from "./components/DesktopSection";
+import MobileSection from "./components/MobileSection";
+
 export default function Dashboard() {
+  const { isTablet } = useGlobalContext();
   return (
-    <main className="flex-1 space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-      </div>
-      <div className="space-y-4">
-        <p className="text-muted-foreground">
-          Bem-vindo ao StockExpress! Aqui você pode visualizar um resumo geral do seu estoque.
-        </p>
-      </div>
-    </main>
+    <>
+      {isTablet ? <MobileSection /> : <DesktopSection />}
+    </>
   );
 }

@@ -1,9 +1,6 @@
-interface Props {
-  width?: number;
-  height?: number;
-  testId?: string;
-}
-export default function Plus({ width = 20, height = 20, testId }: Props) {
+import { SVGProps } from '@/utils/SVGProps'
+
+export default function IPlus({ width = 20, height = 20 }: SVGProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,11 +8,10 @@ export default function Plus({ width = 20, height = 20, testId }: Props) {
       height={height}
       viewBox="0 0 20 20"
       fill="none"
-      data-testId={testId}
     >
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10C0 4.47715 4.47715 0 10 0ZM10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM10 5C10.5523 5 11 5.44772 11 6V8.999L14 9C14.5523 9 15 9.44772 15 10C15 10.5523 14.5523 11 14 11L11 10.999V14C11 14.5523 10.5523 15 10 15C9.44772 15 9 14.5523 9 14V10.999L6 11C5.44772 11 5 10.5523 5 10C5 9.44772 5.44772 9 6 9L9 8.999V6C9 5.44772 9.44772 5 10 5Z"
         fill="currentColor"
       />

@@ -21,13 +21,13 @@ import UsersIcon from "@/components/icons/Users";
 import TrendingUpIcon from "@/components/icons/TrendingUp";
 import UserIcon from "@/components/icons/User";
 import SettingsIcon from "@/components/icons/Settings";
-import Image from 'next/image'
+import Image from "next/image";
 
 // Menu items
 const menuItems = [
   {
     title: "Dashboard",
-    url: "/dashboard",
+    url: "/",
     icon: DashboardIcon,
   },
   {
@@ -88,29 +88,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           />
         </div>
       </SidebarHeader>
-      
+
       <SidebarContent>
-        <SidebarMenu>
+        <SidebarMenu className="py-5 flex flex-col gap-2">
           {menuItems.map((item) => {
-            const isActive = pathname === item.url;
+            const isActive = pathname === `/admin${item.url}`;
             return (
-              <SidebarMenuItem key={item.title}>
+              <SidebarMenuItem key={item.title} className="rounded-lg">
                 <SidebarMenuButton
                   asChild
                   isActive={isActive}
                   className={cn(
-                    "relative",
-                    isActive && "bg-blue-600 text-white hover:bg-blue-700"
+                    "relative rounded-lg text-general-80 hover:bg-primary-90 hover:text-general-30 transition-all duration-150",
+                    isActive && "!text-white !bg-primary-100"
                   )}
                 >
-                  <Link href={item.url} className="flex items-center gap-3">
-                    <item.icon className="h-5 w-5" />
+                  <Link
+                    href={`/admin/${item.url}`}
+                    className="flex items-center gap-3 py-6 px-4"
+                  >
+                    <item.icon className="h-8 w-8" height={24} width={24} />
                     <span className="flex-1">{item.title}</span>
-                    {item.badge && (
-                      <span className="ml-auto rounded-full bg-blue-600 px-2 py-0.5 text-xs text-white">
-                        {item.badge}
-                      </span>
-                    )}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

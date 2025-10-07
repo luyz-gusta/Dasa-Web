@@ -27,9 +27,7 @@ export default function Home() {
       localStorage.setItem("user", JSON.stringify({ email }));
       setError("");
       toast.success("Login realizado com sucesso!");
-      setTimeout(() => {
         router.push("/dashboard");
-      }, 400);
     } else {
       setError("Email ou senha inválidos.");
       setLoading(false);
